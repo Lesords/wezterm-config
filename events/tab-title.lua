@@ -335,15 +335,17 @@ local function check_progress(options, tab_index, panes)
       local icon = nil
       local pct = 0
 
-      if prog == 'Indeterminate' then
-         status = 'indeterminate'
-         icon = _ind_to_frame()
-      elseif prog.Percentage ~= nil then
-         status = 'percentage'
-         icon, pct = _pct_to_frame(prog.Percentage), prog.Percentage
-      elseif prog.Error ~= nil then
-         status = 'error'
-         icon, pct = _pct_to_frame(prog.Error), prog.Error
+      if prog then
+         if prog == 'Indeterminate' then
+            status = 'indeterminate'
+            icon = _ind_to_frame()
+         elseif prog.Percentage ~= nil then
+            status = 'percentage'
+            icon, pct = _pct_to_frame(prog.Percentage), prog.Percentage
+         elseif prog.Error ~= nil then
+            status = 'error'
+            icon, pct = _pct_to_frame(prog.Error), prog.Error
+         end
       end
 
       if icon and status then
@@ -448,8 +450,17 @@ function Tab:update_cells(event_opts, tab, hover, max_width)
       tab_state = 'hover'
    end
 
-   local process_name = clean_process_name(tab.active_pane.foreground_process_name)
-   local base_title, prefix_icon = create_base_title(tab.active_pane.title, process_name)
+   local process_name = ''
+   local base_title = ''
+   local prefix_icon = nil
+
+   if tab.active_pane then
+      local pane_title = tab.active_pane.title or ''
+      local proc_name = tab.active_pane.foreground_process_name or ''
+      process_name = clean_process_name(proc_name)
+      base_title, prefix_icon = create_base_title(pane_title, process_name)
+   end
+
    local unseen_icon = check_unseen_output(event_opts, tab.is_active, tab.panes)
    local progress = check_progress(event_opts, tab.tab_index, tab.panes)
    local inset = TITLE_INSET.default
