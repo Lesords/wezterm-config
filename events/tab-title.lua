@@ -256,7 +256,10 @@ local function create_title(process_name, base_title, max_width, inset)
    local title
 
    if process_name:len() > 0 then
-      title = process_name .. ' ~ ' .. base_title
+      title = process_name
+      if base_title:len() > 0 then
+         title = title .. '(' .. base_title .. ')'
+      end
    else
       title = base_title
    end
@@ -266,7 +269,9 @@ local function create_title(process_name, base_title, max_width, inset)
       title = wezterm.truncate_right(title, wezterm.column_width(title) - diff)
    else
       local padding = max_width - wezterm.column_width(title) - inset
-      title = title .. string.rep(' ', padding)
+      local left = math.floor(padding / 2)
+      local right = padding - left
+      title = string.rep(' ', left) .. title .. string.rep(' ', right)
    end
 
    return title
