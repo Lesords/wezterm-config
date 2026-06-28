@@ -57,9 +57,6 @@ local keys = {
    { key = 'c',          mods = 'CTRL|SHIFT',  action = act.CopyTo('Clipboard') },
    { key = 'v',          mods = 'CTRL|SHIFT',  action = act.PasteFrom('Clipboard') },
 
-   { key = 'n',          mods = 'CTRL|SHIFT',  action = act.SendString('\u{2660}') },
-   { key = 's',          mods = 'CTRL|SHIFT',  action = act.SendString('\u{203D}') },
-
    -- tabs --
    -- tabs: spawn+close
    { key = 't',          mods = mod.SUPER,     action = act.SpawnTab('DefaultDomain') },
@@ -83,39 +80,9 @@ local keys = {
    -- window: spawn windows
    { key = 'n',          mods = mod.SUPER,     action = act.SpawnWindow },
 
-   -- window: zoom window
-   {
-      key = '-',
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         local dimensions = window:get_dimensions()
-         -- on Windows 11 (the only OS I'm able to test this on), `is_full_screen` is always false (it's a bug).
-         -- Calling `set_inner_size` when the window is actually in fullscreen will cause the
-         -- program UI to completely freeze.
-         if platform.is_win or dimensions.is_full_screen then
-            return
-         end
-         local new_width = dimensions.pixel_width - 50
-         local new_height = dimensions.pixel_height - 50
-         window:set_inner_size(new_width, new_height)
-      end)
-   },
-   {
-      key = '=',
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         local dimensions = window:get_dimensions()
-         -- on Windows 11 (the only OS I'm able to test this on), `is_full_screen` is always false (it's a bug).
-         -- Calling `set_inner_size` when the window is actually in fullscreen will cause the
-         -- program UI to completely freeze.
-         if platform.is_win or dimensions.is_full_screen then
-            return
-         end
-         local new_width = dimensions.pixel_width + 50
-         local new_height = dimensions.pixel_height + 50
-         window:set_inner_size(new_width, new_height)
-      end)
-   },
+   -- window: resize font
+   { key = '-', mods = 'CTRL', action = act.DecreaseFontSize },
+   { key = '=', mods = 'CTRL', action = act.IncreaseFontSize },
    {
       key = 'Enter',
       mods = mod.SUPER_REV,
@@ -146,11 +113,7 @@ local keys = {
    { key = 'j',     mods = mod.SUPER, action = act.ActivatePaneDirection('Down') },
    { key = 'h',     mods = mod.SUPER, action = act.ActivatePaneDirection('Left') },
    { key = 'l',     mods = mod.SUPER, action = act.ActivatePaneDirection('Right') },
-   {
-      key = 'p',
-      mods = mod.SUPER_REV,
-      action = act.PaneSelect({ alphabet = '1234567890', mode = 'SwapWithActiveKeepFocus' }),
-   },
+   { key = 'Tab', mods = mod.SUPER_REV, action = act.PaneSelect({ alphabet = '1234567890', mode = 'SwapWithActiveKeepFocus' }) },
 
    -- panes: scroll pane
    { key = 'u',        mods = mod.SUPER, action = act.ScrollByLine(-5) },
