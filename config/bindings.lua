@@ -118,8 +118,10 @@ local keys = {
    -- panes: scroll pane
    { key = 'u',        mods = mod.SUPER, action = act.ScrollByLine(-5) },
    { key = 'd',        mods = mod.SUPER, action = act.ScrollByLine(5) },
-   { key = 'PageUp',   mods = 'NONE',    action = act.ScrollByPage(-0.75) },
-   { key = 'PageDown', mods = 'NONE',    action = act.ScrollByPage(0.75) },
+   { key = 'PageUp',   mods = 'CTRL|SHIFT', action = act.ScrollByPage(-0.75) },
+   { key = 'PageDown', mods = 'CTRL|SHIFT', action = act.ScrollByPage(0.75) },
+   { key = 'Home',     mods = 'CTRL|SHIFT', action = act.ScrollToTop },
+   { key = 'End',      mods = 'CTRL|SHIFT', action = act.ScrollToBottom },
 
    -- key-tables --
    -- resizes fonts
